@@ -15,14 +15,13 @@ const router = express.Router();
  * @swagger
  * tags:
  *   name: Products
- *   description: API для управления продуктами (создание, просмотр, поиск по ID, удаление)
  */
 
 /**
  * @swagger
  * /products:
  *   get:
- *     summary: Получить все продукты
+ *     summary:
  *     tags: [Products]
  *     responses:
  *       200:
@@ -34,7 +33,7 @@ router.get("/", getProducts);
  * @swagger
  * /products/{id}:
  *   get:
- *     summary: Получить продукт по ID
+ *     summary:
  *     tags: [Products]
  *     parameters:
  *       - in: path
@@ -54,7 +53,7 @@ router.get("/:id", getProductById);
  * @swagger
  * /products:
  *   post:
- *     summary: Добавить новый продукт
+ *     summary:
  *     tags: [Products]
  *     requestBody:
  *       required: true
@@ -65,28 +64,20 @@ router.get("/:id", getProductById);
  *             properties:
  *               name:
  *                 type: string
- *                 example: "Банан"
  *               price:
  *                 type: number
- *                 example: 80
  *               description:
  *                 type: string
- *                 example: "Спелые бананы из Эквадора"
  *               size:
  *                 type: string
- *                 example: "M"
  *               category:
  *                 type: string
- *                 example: "Fruits"
  *               tags:
  *                 type: string
- *                 example: "organic,sweet,yellow"
  *               sku:
  *                 type: string
- *                 example: "BAN-001"
  *               rating:
  *                 type: number
- *                 example: 4.5
  *               images:
  *                 type: array
  *                 items:
@@ -105,7 +96,7 @@ router.post("/", upload.array("images", 5), createProduct);
  * @swagger
  * /products/{id}:
  *   delete:
- *     summary: Удалить продукт по ID
+ *     summary:
  *     tags: [Products]
  *     parameters:
  *       - in: path
@@ -125,7 +116,7 @@ router.delete("/:id", deleteProduct);
  * @swagger
  * /products:
  *   delete:
- *     summary: Удалить все продукты
+ *     summary:
  *     tags: [Products]
  *     responses:
  *       200:
