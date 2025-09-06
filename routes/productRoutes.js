@@ -15,7 +15,7 @@ const router = express.Router();
  * @swagger
  * tags:
  *   name: Products
- *   description: API для управления продуктами (создание, просмотр, поиск по ID)
+ *   description: API для управления продуктами (создание, просмотр, поиск по ID, удаление)
  */
 
 /**
@@ -23,34 +23,10 @@ const router = express.Router();
  * /products:
  *   get:
  *     summary: Получить все продукты
- *     description: Возвращает список всех доступных продуктов
  *     tags: [Products]
  *     responses:
  *       200:
  *         description: Успешный ответ со списком продуктов
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: string
- *                     description: Уникальный идентификатор продукта
- *                     example: "1"
- *                   name:
- *                     type: string
- *                     example: "Яблоко"
- *                   price:
- *                     type: number
- *                     example: 100
- *                   description:
- *                     type: string
- *                     example: "Свежие красные яблоки"
- *                   image:
- *                     type: string
- *                     example: "uploads/apple.jpg"
  */
 router.get("/", getProducts);
 
@@ -59,39 +35,16 @@ router.get("/", getProducts);
  * /products/{id}:
  *   get:
  *     summary: Получить продукт по ID
- *     description: Возвращает подробную информацию о продукте по его уникальному ID
  *     tags: [Products]
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
- *         description: Уникальный идентификатор продукта
  *         schema:
  *           type: string
- *           example: "2"
  *     responses:
  *       200:
  *         description: Продукт найден
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: string
- *                   example: "2"
- *                 name:
- *                   type: string
- *                   example: "Апельсин"
- *                 price:
- *                   type: number
- *                   example: 120
- *                 description:
- *                   type: string
- *                   example: "Сочные апельсины из Турции"
- *                 image:
- *                   type: string
- *                   example: "uploads/orange.jpg"
  *       404:
  *         description: Продукт не найден
  */
@@ -102,7 +55,6 @@ router.get("/:id", getProductById);
  * /products:
  *   post:
  *     summary: Добавить новый продукт
- *     description: Создает новый продукт с названием, ценой, описанием и изображением
  *     tags: [Products]
  *     requestBody:
  *       required: true
@@ -113,38 +65,54 @@ router.get("/:id", getProductById);
  *             properties:
  *               name:
  *                 type: string
- *                 description: Название продукта
  *                 example: "Банан"
  *               price:
  *                 type: number
- *                 description: Цена продукта
  *                 example: 80
  *               description:
  *                 type: string
- *                 description: Описание продукта
  *                 example: "Спелые бананы из Эквадора"
- *               image:
+ *               size:
  *                 type: string
- *                 format: binary
- *                 description: Изображение продукта
+ *                 example: "M"
+ *               category:
+ *                 type: string
+ *                 example: "Fruits"
+ *               tags:
+ *                 type: string
+ *                 example: "organic,sweet,yellow"
+ *               sku:
+ *                 type: string
+ *                 example: "BAN-001"
+ *               rating:
+ *                 type: number
+ *                 example: 4.5
+ *               images:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   format: binary
+ *                 description: Список изображений продукта
  *     responses:
  *       201:
  *         description: Продукт успешно создан
+ *       400:
+ *         description: Ошибка при создании продукта
  */
-router.post("/", upload.single("image"), createProduct);
+router.post("/", upload.array("images", 5), createProduct);
 
 /**
  * @swagger
  * /products/{id}:
  *   delete:
+ *     summary: Удалить продукт по ID
  *     tags: [Products]
- *     summary: Удалить продукт по id
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
- *           type: integer
+ *           type: string
  *     responses:
  *       200:
  *         description: Продукт успешно удален
@@ -157,8 +125,8 @@ router.delete("/:id", deleteProduct);
  * @swagger
  * /products:
  *   delete:
- *     tags: [Products]
  *     summary: Удалить все продукты
+ *     tags: [Products]
  *     responses:
  *       200:
  *         description: Все продукты успешно удалены

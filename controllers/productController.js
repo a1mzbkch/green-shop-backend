@@ -45,19 +45,25 @@ export const deleteAllProducts = async (req, res) => {
 
 export const createProduct = async (req, res) => {
   try {
-    const { name, price, description } = req.body;
+    const { name, price, description, size, category, tags, sku, rating } =
+      req.body;
+    const images = req.files ? req.files.map((file) => file.path) : [];
 
-    const count = await Product.countDocuments();
-    const newProduct = await Product.create({
-      id: count + 1,
+    const newProduct = new Product({
       name,
       price,
       description,
-      image: req.file ? req.file.path : null,
+      size,
+      category,
+      tags: tags ? tags.split(",") : [],
+      sku,
+      rating,
+      images,
     });
 
+    await newProduct.save();
     res.status(201).json(newProduct);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+  } catch (error) {
+    res.status(400).json({ message: "Ошибка при создании продукта", error });
   }
 };
